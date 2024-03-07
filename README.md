@@ -20,6 +20,18 @@ Install the required Python packages:
 
 You can change the owner name or bot name in the code by modifying the `owner` and `botname` parameters in the `url` variable in the `answer` function. By default, the owner name is set to `apk000` and the bot name is set to `APK`.
 
+## Updates 🚀
+
+### Version 2.0
+
+- Added functionality to search and summarize information from Wikipedia based on user input.
+- Improved speech recognition to provide better feedback when recognizing user input.
+- Added the ability to respond with the current time when the user asks for it.
+- Improved the `answer` function to use the `owner` parameter to customize the chatbot owner's name.
+
+To update the owner name or bot name, modify the `owner` parameter in the `url` variable in the `answer` function.
+
+
 Example:
 ```python
 url = f"https://api.popcat.xyz/chatbot?msg={q}&owner=new_owner_name&botname=new_bot_name"
