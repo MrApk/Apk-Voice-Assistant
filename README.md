@@ -47,3 +47,9 @@ To update the owner name or bot name, modify the `owner` parameter in the `url` 
 
 - If you encounter any issues with the speech recognition or text-to-speech features, make sure your microphone is properly connected and working.
 - Check your internet connection if the voice assistant is unable to fetch responses from the chatbot API.
+
+
+## License 📜
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
