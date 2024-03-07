@@ -1,50 +1,47 @@
 import speech_recognition as sr
 import pyttsx3
-from gtts import gTTS
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
 import requests
 import time
+import datetime
+import wikipedia
 
 r = sr.Recognizer() 
 
-def SpeakText():
-    while(1):
-        try:
-            with sr.Microphone() as source2:
-                r.adjust_for_ambient_noise(source2, duration=0.2)
-                audio2 = r.listen(source2)
-                MyText = r.recognize_google(audio2)
-                return MyText
-        except sr.RequestError as e:
-            print("Could not request results; {0}".format(e))
-        except sr.UnknownValueError:
-            print("unknown error occurred")
 
-def play_audio(file):
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound(file)
-    sound.play()
-    while pygame.mixer.get_busy():
-        pygame.time.Clock().tick(10)
-    sound.stop() 
-    os.remove(file)   
+def SpeakText():
+    r = sr.Recognizer()
+
+    with sr.Microphone() as source:
+
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(audio, language='en-in')
+        print("User:", query)
+
+    except Exception as e:
+        print(e)
+        print("Unable to Recognize your voice.")
+        return "None"
+
+    return query
+ 
 
 def assistant_speaks(output):
-    print("APK:", output)
-    toSpeak = gTTS(text=output, lang='en', slow=False)
-    file = "audio.mp3"  
-    toSpeak.save(file)
-    play_audio(file)
+    print(f"APK: {output}")
+    engine = pyttsx3.init('sapi5')
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[1].id)
+    engine.say(output)
+    engine.runAndWait()
 
 def answer(q):
-    url = f"https://api.popcat.xyz/chatbot?msg={q}&owner=apk000&botname=APK"
     try:
-        response = requests.get(url)
-        data = response.json()
-        ans = data.get('response')
-        return ans
+        response = requests.get(f"https://api.popcat.xyz/chatbot?msg={q}&owner=Ankit&botname=APK").json().get('response')
+        return response
     except requests.exceptions.RequestException as e:
         print("Error fetching data from API:", e)
         return "Sorry, I couldn't fetch a response at the moment."
@@ -53,8 +50,46 @@ def answer(q):
         return "Sorry, I couldn't decode the response from the API."
 
 assistant_speaks("Hello, I am APK. How can I help you today?")
-while True:
-    time.sleep(3)
-    data = SpeakText()
-    print("User:", data)
-    assistant_speaks(answer(data))
+
+
+if __name__ == '__main__':
+
+    while True:
+
+        query = SpeakText().lower()
+
+        if 'wikipedia' in query:
+            try:
+                assistant_speaks('Searching Wikipedia...')
+                query = query.replace("wikipedia", "")
+                results = wikipedia.summary(query, sentences=3)
+                assistant_speaks("According to Wikipedia")
+                print(results)
+                assistant_speaks(results)
+
+            except wikipedia.exceptions.DisambiguationError as e:
+                assistant_speaks("Several pages matched your query. Here are some options:")
+                options = e.options
+                for i, option in enumerate(options, start=1):
+                    print(f"{i}. {option}")
+                assistant_speaks("Please choose a specific option.")
+    
+                choice = int(SpeakText().lower()) - 1
+                if choice >= 0 and choice < len(options):
+                    query = options[choice]
+                    results = wikipedia.summary(query, sentences=3)
+                    assistant_speaks(results)
+                else:
+                    assistant_speaks("Invalid choice. Please try again.")
+
+            except wikipedia.exceptions.PageError as e:
+                assistant_speaks("Sorry, I couldn't find any results for your query.")
+
+            
+        elif 'the time' in query:
+            print("User:", query)
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            assistant_speaks(f"Sir, the time is {strTime}")
+
+        else:
+            assistant_speaks(answer(query))
