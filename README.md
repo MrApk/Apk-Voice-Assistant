@@ -4,9 +4,13 @@ This is a simple voice assistant that listens to user input through the micropho
 
 ## Installation 🚀
 
-Install the required Python packages:
+- Install the required Python packages:
 ```bash
-   pip install speech_recognition pyttsx3 gtts pygame requests
+pip install -r requirements.txt
+```
+or
+```bash
+pip install speechrecognition pyttsx3 requests datetime wikipedia
 ```
 
 
@@ -20,6 +24,13 @@ Install the required Python packages:
 
 You can change the owner name or bot name in the code by modifying the `owner` and `botname` parameters in the `url` variable in the `answer` function. By default, the owner name is set to `apk000` and the bot name is set to `APK`.
 
+
+Example:
+```python
+url = f"https://api.popcat.xyz/chatbot?msg={q}&owner=new_owner_name&botname=new_bot_name"
+```
+
+
 ## Updates 🚀
 
 ### Version 2.0
@@ -30,14 +41,6 @@ You can change the owner name or bot name in the code by modifying the `owner` a
 - Improved the `answer` function to use the `owner` parameter to customize the chatbot owner's name.
 
 To update the owner name or bot name, modify the `owner` parameter in the `url` variable in the `answer` function.
-
-
-Example:
-```python
-url = f"https://api.popcat.xyz/chatbot?msg={q}&owner=new_owner_name&botname=new_bot_name"
-```
-
-
 
 
 ## Troubleshooting ⚠️
