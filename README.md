@@ -10,7 +10,7 @@ pip install -r requirements.txt
 ```
 or
 ```bash
-pip install speechrecognition pyttsx3 requests datetime wikipedia
+pip install speechrecognition pyttsx3 requests datetime wikipedia pyaudio
 ```
 
 
