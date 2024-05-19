@@ -1,12 +1,8 @@
 import speech_recognition as sr
 import pyttsx3
 import requests
-import time
 import datetime
 import wikipedia
-
-r = sr.Recognizer() 
-
 
 def SpeakText():
     r = sr.Recognizer()
